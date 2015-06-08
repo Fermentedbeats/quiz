@@ -63,6 +63,8 @@ function Quiz(array, thisHelper){
 	this.questionArray = array;
 	this.num = 0;
 	this.score = 0;
+	this.radioB = document.getElementsByName('choices');
+	this.labels = document.getElementsByTagName('label');
 
 //Updates values of radio buttons and labels, updates DOM *********************************************************
 
@@ -70,18 +72,16 @@ function Quiz(array, thisHelper){
 
 							var div = document.getElementById("question");
 							div.innerHTML = this.questionArray[this.num].question;
-
-							var radioB = document.getElementsByName('choices');
-							var labels = document.getElementsByTagName('label');
-							for(var i = 0; i<radioB.length; i++){
-								radioB[i].value = this.questionArray[this.num].choices[i];	
-								radioB[i].checked = false;
-								console.log("----" + radioB[i].value);		
+							
+							for(var i = 0; i<this.radioB.length; i++){
+								this.radioB[i].value = this.questionArray[this.num].choices[i];	
+								this.radioB[i].checked = false;
+								console.log("----" + this.radioB[i].value);		
 							}
 
-							for(var k = 0; k<labels.length; k++){
+							for(var k = 0; k<this.labels.length; k++){
 								
-								$(labels[k]).replaceWith("<label>" + radioB[k].value + "</label>");
+								$(this.labels[k]).replaceWith("<label>" + this.radioB[k].value + "</label>");
 							}							
 	
 						}
@@ -90,21 +90,22 @@ function Quiz(array, thisHelper){
 
 	this.answerCheck = function(){
 							var checked = false;
-							var radioB = document.getElementsByName('choices');
+							// var radioB = document.getElementsByName('choices');
 	
-							for(var i =0; i < radioB.length; i++){
-								if(radioB[i].checked === true){
+							for(var i =0; i < this.radioB.length; i++){
+								if(this.radioB[i].checked === true){
 									checked = true;
 									
-									if(radioB[i].value === this.questionArray[this.num].choices[this.questionArray[this.num].correctAnswer]){
-										console.log("CORRECT!!!");
+									if(this.radioB[i].value === this.questionArray[this.num].choices[this.questionArray[this.num].correctAnswer]){
+										$(this.labels[i]).css("color", "red");
 										$('#message').replaceWith("<p id='message'>CORRECT!!!</p>");
 										$('#message').fadeTo(500, 1);
 										this.score+=100;
 										this.nextQuestion();			
 									}
 									else{
-										console.log("INCORRECT!!!");
+
+										$(this.labels[this.questionArray[this.num].correctAnswer]).css("color", "red");
 										$('#message').replaceWith("<p id='message'>INCORRECT!!!</p>");
 										$('#message').fadeTo(500, 1);
 										this.nextQuestion();
